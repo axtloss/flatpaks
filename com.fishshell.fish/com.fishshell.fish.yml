@@ -8,6 +8,8 @@ finish-args:
   - --filesystem=host:rw
   - --socket=session-bus
   - --share=network
+  - --persist=~/.config/fish
+  - --env=__fish_sysconf_dir=/app/etc/fish
 
 modules:
   - name: fish
@@ -16,8 +18,12 @@ modules:
       - type: archive
         url: https://github.com/fish-shell/fish-shell/releases/download/3.5.0/fish-3.5.0.tar.xz
         sha256: 291e4ec7c6c3fea54dc1aed057ce3d42b356fa6f70865627b2c7dfcecaefd210
+      - type: file
+        path: ./fish_command_not_found.fish
     build-commands:
       - mkdir build
       - cd build && cmake .. -DCMAKE_INSTALL_PREFIX=/app
       - cd build && make
       - cd build && make install
+      - mkdir -p /app/etc/fish/conf.d
+      - install -Dm755 fish_command_not_found.fish /app/etc/fish/conf.d/fish_command_not_found.fish
