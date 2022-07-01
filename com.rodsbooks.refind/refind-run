@@ -1,0 +1,15 @@
+#!/usr/bin/bash
+if [[ $1 == "install" ]]; then
+	mkdir ~/refind-install
+	cp -r /app ~/refind-install/.
+	cd ~/refind-install/.
+	sed -i "s|*   RefindDir=*|   RefindDir=\"${HOME}/refind-install/app/refind\"|"  app/bin/refind-install
+	flatpak-spawn --host pkexec app/bin/refind-install
+elif [[ $1 == "mkdefault" ]]; then
+	/app/bin/refind-mkdefault
+elif [[ $1 == "mkrlconf" ]]; then
+	/app/bin/mkrlconf
+elif [[ $1 == "mvrefind" ]]; then
+	/app/bin/mvrefind
+fi
+

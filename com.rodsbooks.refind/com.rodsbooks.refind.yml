@@ -1,0 +1,72 @@
+app-id: com.rodsbooks.refind
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+writable-sdk: true
+command: refind-run
+finish-args:
+  - --filesystem=/efi:rw
+  - --filesystem=/boot/efi:rw
+  - --filesystem=/boot:rw
+  - --filesystem=home:rw
+  - --socket=session-bus
+
+
+modules:
+  - name: dosfstools
+    buildsystem: simple
+    sources:
+      - type: archive
+        #path: ./dosfstools-4.2.tar.gz
+        url: https://github.com/dosfstools/dosfstools/releases/download/v4.2/dosfstools-4.2.tar.gz
+        sha256: 64926eebf90092dca21b14259a5301b7b98e7b1943e8a201c7d726084809b527
+    build-commands:
+      - ./configure --prefix=/app
+      - make
+      - make install
+  - name: gnu-efi
+    buildsystem: simple
+    sources: 
+      - type: archive
+        #path: ./gnu-efi-3.0.14.tar.bz2
+        url: https://deac-fra.dl.sourceforge.net/project/gnu-efi/gnu-efi-3.0.14.tar.bz2
+        sha256: b73b643a0d5697d1f396d7431448e886dd805668789578e3e1a28277c9528435
+    build-commands:
+      - sed -e 's/-Werror//g' -i Make.defaults
+      - CFLAGS="-O2 -flto -ffat-lto-objects" make
+      - CFLAGS="-O2 -flto -ffat-lto-objects" make -C lib
+      - CFLAGS="-O2 -flto -ffat-lto-objects" make -C gnuefi
+      - CFLAGS="-O2 -flto -ffat-lto-objects" make -C inc
+      - CFLAGS="-O2 -flto -ffat-lto-objects" LDFLAGS="" make -C apps
+      - make PREFIX=/usr install
+      - install -vDm 644 apps/*.efi -t "/usr/share/gnu-efi/apps/x86_64/"
+      - ls /usr/include/efi
+      - ls /usr/lib
+      - ls /usr/share/gnu-efi/apps/x86_64/
+  - name: refind
+    buildsystem: simple
+    sources:
+      - type: archive
+        url: https://master.dl.sourceforge.net/project/refind/0.13.3/refind-src-0.13.3.tar.gz
+        sha256: af822912aa1e036363f98b96a2e685baaaa7e4c1eea4527de669bb827dad582c
+      - type: file
+        path: ./refind-run
+    build-commands:
+      - sed -e 's|RefindDir=\"\$ThisDir/refind\"|RefindDir="/app/refind/"|g' -i refind-install
+      - make
+      - make gptsync
+      - make fs -j1
+      - mkdir -p /app/refind
+      - mkdir -p /app/etc/refind.d/keys
+      - install -vDm 644 refind/*.efi -t "/app/refind/"
+      - install -vDm 644 drivers_*/*.efi -t "/app/refind/drivers_$x86_64/"
+      - install -vDm 644 gptsync/*.efi -t "/app/refind/tools_x86_64/"
+      - install -vDm 644 refind.conf-sample -t "/app/refind/"
+      - install -vDm 644 keys/*{cer,crt} -t "/app/refind/keys/"
+      - install -vdm 700 "/app/etc/refind.d/keys"
+      - install -vDm 644 fonts/*.png -t "/app/refind/fonts/"
+      - install -vDm 644 icons/*.png -t "/app/refind/icons"
+      - install -vDm 644 icons/svg/*.svg -t "/app/refind/icons/svg/"
+      - install -vDm 755 {refind-{install,mkdefault},mkrlconf,mvrefind} -t "/app/bin/"
+      - install -vDm 755 fonts/mkfont.sh "/app/bin/refind-mkfont"
+      - install -vDm 755 refind-run -t "/app/bin/refind-run"
