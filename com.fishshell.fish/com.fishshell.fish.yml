@@ -1,0 +1,23 @@
+app-id: com.fishshell.fish
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+command: fish
+
+finish-args:
+  - --filesystem=host:rw
+  - --socket=session-bus
+  - --share=network
+
+modules:
+  - name: fish
+    buildsystem: simple
+    sources:
+      - type: archive
+        url: https://github.com/fish-shell/fish-shell/releases/download/3.5.0/fish-3.5.0.tar.xz
+        sha256: 291e4ec7c6c3fea54dc1aed057ce3d42b356fa6f70865627b2c7dfcecaefd210
+    build-commands:
+      - mkdir build
+      - cd build && cmake .. -DCMAKE_INSTALL_PREFIX=/app
+      - cd build && make
+      - cd build && make install
