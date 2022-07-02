@@ -13,13 +13,10 @@ modules:
     sources:
       - type: archive
         path: ./coreutils-9.1.tar.xz
-        dest: ./coreutils
       - type: file
         path: ./coreutil-run
     build-commands:
-      - ls coreutils
-      - cd coreutils && ./configure --prefix=/app --libexecdir=/app/lib
-      - cd coreutils && make 
-      - ls coreutils
-      - cd coreutils && make install
+      - ./configure --prefix=/app --libexecdir=/app/lib
+      - make 
+      - make install
       - install -Dm755 ./coreutil-run /app/bin/coreutil-run
