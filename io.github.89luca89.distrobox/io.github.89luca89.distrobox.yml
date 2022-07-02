@@ -1,0 +1,30 @@
+app-id: io.github.luca.distrobox
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+command: distrobox
+finish-args:
+  - --share=network
+  - --socket=session-bus
+  - --filesystem=home:rw
+  - --share=ipc
+  - --socket=fallback-x11 # not sure why, but gui applications only work when both x11 and fallback-x11 are allowed
+  - --socket=x11
+  - --socket=wayland
+  - --device=all
+#  - --filesystem=host-etc:rw
+#  - --filesystem=host-os:rw
+
+modules:
+  - name: distrobox
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/89luca89/distrobox.git
+        branch: main
+      - type: file
+        path: ./podman
+    build-commands:
+      - chmod +x install
+      - ./install --prefix /app
+      - install -Dm755 ./podman /app/bin/podman

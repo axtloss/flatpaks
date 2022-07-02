@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+set -x
+
+command="$@"
+command=$(echo "${command}" | sed 's|podman||' | sed 's|--volume /run/host/monitor/host.conf:/etc/host.conf:ro||' | sed 's|--volume /run/host/monitor/hosts:/etc/hosts:ro||' | sed 's|--volume /run/host/monitor/resolv.conf:/etc/resolv.conf:ro||')
+
+flatpak-spawn --host podman $command
