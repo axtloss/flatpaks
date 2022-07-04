@@ -1,4 +1,4 @@
-# distrobox
+# [distrobox](https://github.com/89luca89/distrobox)
 
 this flatpak needs some more setup, the host also needs podman installed.
 
