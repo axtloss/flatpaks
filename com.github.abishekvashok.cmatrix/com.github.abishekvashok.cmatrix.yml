@@ -1,0 +1,20 @@
+app-id: com.github.abishekvashok.cmatrix
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+command: cmatrix
+modules:
+    - name: cmatrix
+      buildsystem: simple
+      sources:
+        - type: archive
+          url: "https://github.com/abishekvashok/cmatrix/releases/download/v2.0/cmatrix-v2.0-Butterscotch.tar"
+          sha256: "e46c739bfe79e570db2461f89ac66ea79a8fab8efb8423ab53f143e93c2553bc"
+      build-commands:
+       # - mv cmatrix/* . 
+        - cd cmatrix && ./configure
+        - cd cmatrix && make DESTDIR=/app
+        - cd cmatrix && ls
+        - ls /app/
+        - cd cmatrix && make install DESTDIR=/app
+        - install -Dm755 cmatrix/cmatrix /app/bin/cmatrix
