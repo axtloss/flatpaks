@@ -1,0 +1,16 @@
+app-id: com.github.aristocratos.btop
+runtime: org.freedesktop.Platform
+runtime-version: '21.08'
+sdk: org.freedesktop.Sdk
+command: btop
+
+modules:
+  - name: btop
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/aristocratos/btop
+        branch: main
+    build-commands:
+      - make
+      - make install PREFIX=/app/
