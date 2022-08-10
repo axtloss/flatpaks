@@ -4,21 +4,7 @@ runtime-version: '21.08'
 sdk: org.freedesktop.Sdk
 command: vmtouch
 finish-args:
-  - --allow=devel
-  - --allow=multiarch
-  - --share=network
-  - --share=ipc
-  - --socket=x11
-  - --socket=wayland
-  - --socket=pulseaudio
-  - --device=all
-  - --system-talk-name=org.freedesktop.UDisks2
-  - --system-talk-name=org.freedesktop.Flatpak
-  - --talk-name=org.freedesktop.Notifications
-  - --env=LD_LIBRARY_PATH=/app/lib:/app/lib32
-  - --env=PATH=/app/bin:/app/utils/bin:/usr/bin:/usr/lib/extensions/vulkan/MangoHud/bin/:/usr/bin:/usr/lib/extensions/vulkan/OBSVkCapture/bin/
-  - --require-version=1.1.2
-  - --filesystem=host:rw # this is just for testing
+  - --filesystem=host:rw
 
 modules:
   - name: vmtouch
