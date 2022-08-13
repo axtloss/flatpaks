@@ -6,6 +6,13 @@
   "base-version": "21.08",
   "sdk": "org.freedesktop.Sdk",
   "command": "entrusted-run",
+
+  "finish-args": [
+     "--share=ipc",
+     "--share=x11",
+     "--device=all"
+  ],
+
   "modules": [
     {
             "name": "qemu",
@@ -43,7 +50,7 @@
         {
           "type": "file",
           "url": "https://github.com/rimerosolutions/entrusted/releases/download/0.2.4/entrusted-livecd-amd64-0.2.4.iso",
-	  "sha256": "0d88d2c04f4b7bc7a7fdc7b2b494347ba970801197d42f05ead53e0eeb4d3fee"
+	  "sha256": "0d88d2c04f4b7bc7a7fdc7b2b494347ba970801197d42f05ead53e0eeb4d3fee",
 	  "dest-filename": "entrusted.iso"
         }
       ],
