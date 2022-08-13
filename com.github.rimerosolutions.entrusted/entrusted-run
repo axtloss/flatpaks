@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+/app/bin/qemu-system-x86_64 -name entrusted,process=entrusted -pidfile ~/entrusted.pid -machine q35,smm=off,vmport=off -enable-kvm -cpu host,kvm=on -smp cores=2,threads=2,sockets=1 -m 2G -device virtio-balloon -smbios type=2,manufacturer="Quickemu Project",product=Quickemu,version=3.15,serial=0xDEADBEEF,location=quickemu.com,asset=entrusted -display none -rtc base=localtime,clock=host,driftfix=slew -monitor none -serial mon:stdio -device virtio-net,netdev=nic -netdev user,hostname=entrusted,hostfwd=tcp::13000-:13000,id=nic -drive media=cdrom,index=0,file=/app/bin/entrusted/entrusted.iso &
+zypak-wrapper /app/bin/entrusted/entrusted "$@"
+kill -SIGTERM $(cat ~/entrusted.pid)
+rm ~/guest.in
+rm ~/guest.out
+

@@ -1,0 +1,58 @@
+{
+  "app-id": "com.github.rimerosolutions.entrusted",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "21.08",
+  "base": "org.electronjs.Electron2.BaseApp",
+  "base-version": "21.08",
+  "sdk": "org.freedesktop.Sdk",
+  "command": "entrusted-run",
+  "modules": [
+    {
+            "name": "qemu",
+            "config-opts": [
+                "--disable-user",
+                "--enable-kvm",
+                "--disable-spice",
+                "--disable-opengl",
+                "--disable-virglrenderer",
+                "--disable-usb-redir",
+                "--disable-smartcard",
+                "--python=/bin/python3",
+                "--target-list=x86_64-softmmu"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "url": "https://download.qemu.org/qemu-6.2.0.tar.xz",
+                    "sha256": "68e15d8e45ac56326e0b9a4afa8b49a3dfe8aba3488221d098c84698bca65b45"
+                }
+            ]
+    },
+    {
+      "name": "entrusted",
+      "buildsystem": "simple",
+      "sources": [
+        {
+          "type": "archive",
+          "path": "./entrusted-linux-x64.tar.xz"
+        },
+        {
+          "type": "file",
+          "path": "./entrusted-run"
+        },
+        {
+          "type": "file",
+          "url": "https://github.com/rimerosolutions/entrusted/releases/download/0.2.4/entrusted-livecd-amd64-0.2.4.iso",
+	  "sha256": "0d88d2c04f4b7bc7a7fdc7b2b494347ba970801197d42f05ead53e0eeb4d3fee"
+	  "dest-filename": "entrusted.iso"
+        }
+      ],
+      "build-commands": [
+        "mkdir -p /app/bin/entrusted",
+        "cp -r * /app/bin/entrusted/.",
+        "install entrusted.iso /app/bin/entrusted/entrusted.iso",
+        "install -Dm755 entrusted-run /app/bin/entrusted-run"
+      ]
+    }
+  ]
+}
