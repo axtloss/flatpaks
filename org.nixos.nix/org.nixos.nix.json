@@ -7,7 +7,7 @@
   "finish-args": [
     "--share=network",
     "--env=NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt",
-    "--env=PATH=/var/home/axtlos/.nix-profile/bin:/app/bin:/usr/bin"
+    "--env=PATH=~/.nix-profile/bin:/app/bin:/usr/bin"
   ],
   "modules": [
     {
