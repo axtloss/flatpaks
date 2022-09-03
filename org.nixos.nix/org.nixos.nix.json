@@ -1,0 +1,38 @@
+{
+  "app-id": "org.nixos.nix",
+  "runtime": "org.freedesktop.Platform",
+  "runtime-version": "22.08",
+  "sdk": "org.freedesktop.Sdk",
+  "command": "run",
+  "finish-args": [
+    "--share=network",
+    "--env=NIX_SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt",
+    "--env=PATH=/var/home/axtlos/.nix-profile/bin:/app/bin:/usr/bin"
+  ],
+  "modules": [
+    {
+      "name": "nix",
+      "buildsystem": "simple",
+      "sources": [
+        {
+          "type": "file",
+          "path": "./install.sh"
+        },
+        {
+          "type": "file",
+          "path": "./sudo"
+        },
+        {
+          "type": "file",
+          "path": "./run.sh"
+        }
+      ],
+      "build-commands": [
+        "mkdir /app/bin",
+        "install -Dm755 sudo /app/bin/sudo",
+        "install -Dm755 ./install.sh /app/bin/install.sh",
+        "install -Dm755 ./run.sh /app/bin/run"
+      ]
+    }
+  ]
+}
