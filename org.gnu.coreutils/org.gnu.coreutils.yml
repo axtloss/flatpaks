@@ -6,13 +6,13 @@ finish-args:
   - --filesystem=host
 command: coreutil-run
 
-
 modules:
   - name: coreutils
     buildsystem: simple
     sources:
       - type: archive
-        path: ./coreutils-9.1.tar.xz
+        url: http://ftp.gnu.org/gnu/coreutils/coreutils-9.1.tar.xz
+        sha256: 61a1f410d78ba7e7f37a5a4f50e6d1320aca33375484a3255eddf17a38580423
       - type: file
         path: ./coreutil-run
     build-commands:
