@@ -1,0 +1,54 @@
+app-id: al.getcryst.crystal
+runtime: org.freedesktop.Platform
+runtime-version: '22.08'
+sdk: org.freedesktop.Sdk
+command: crystal
+
+finish-args:
+  - --socket=fallback-x11
+  - --socket=wayland
+  - --share=network
+  - --share=ipc
+  - --device=dri
+  - --socket=pulseaudio
+  - --allow=devel
+
+modules:
+  - name: talloc
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://www.samba.org/ftp/talloc/talloc-2.3.4.tar.gz
+        sha256: 179f9ebe265e67e4ab2c26cad2b7de4b6a77c6c212f966903382869f06be6505
+
+  - name: proot
+    buildsystem: simple
+    build-commands:
+      - mv uthash/src/* src
+      - make -C src proot
+      - install -d /app/lib
+      - install -Dm755 src/proot -t /app/bin
+    sources:
+      - type: archive
+        url: https://github.com/troydhanson/uthash/archive/refs/tags/v2.3.0.tar.gz
+        sha256: e10382ab75518bad8319eb922ad04f907cb20cccb451a3aa980c9d005e661acc
+        dest: uthash
+      - type: git
+        url: https://github.com/termux/proot
+        commit: 5c462a6ecfddd629b1439f38fbb61216d6fcb359
+
+  - name: crystal
+    buildsystem: simple
+    sources:
+      - type: file
+        path: ./crystal.sh
+      - type: file
+        path: ./crystal.desktop
+      - type: file
+        url: https://github.com/crystal-linux/iso/releases/download/09-13-22-16-25/crystal-rootfs-09-13-22-16-25-x86_64.tar.gz
+        sha256: 487ddb1df4457adbb3df1b34490ca1000eaa15206d6684a513a2306598d91d00
+    build-commands:
+      - install -Dm755 crystal.sh /app/bin/crystal
+      - install -Dm755 crystal.desktop /app/share/applications/al.getcryst.crystal
+      - install -Dm755 crystal-rootfs-*.tar.gz /app/crystal.tar.gz
+

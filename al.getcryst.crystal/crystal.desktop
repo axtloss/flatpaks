@@ -1,0 +1,10 @@
+ktop Entry]
+Type=Application
+Version=1.0
+Name=Crystal
+GenericName=Crystal Linux
+Comment=Crystal Linux proot
+Exec=crystal
+Icon=al.getcryst.crystal
+Terminal=true
+Categories=System;
