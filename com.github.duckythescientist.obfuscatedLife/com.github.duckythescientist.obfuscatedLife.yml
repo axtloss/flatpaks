@@ -1,0 +1,17 @@
+app-id: com.github.duckythescientist.obfuscatedLife
+runtime: org.freedesktop.Platform
+runtime-version: '22.08'
+sdk: org.freedesktop.Sdk
+
+command: obfuscatedLife
+
+modules:
+  - name: obfuscatedLife
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/duckythescientist/obfuscatedLife
+        branch: original
+    build-commands:
+      - gcc life.c
+      - install -Dm755 a.out /app/bin/obfuscatedLife
