@@ -8,5 +8,5 @@ if [[ ! -f ${DESTDIR}/osx-kvm/mac_hdd_ng.img ]]; then
     qemu-img convert BaseSystem.dmg -O raw BaseSystem.img
     qemu-img create -f qcow2 mac_hdd_ng.img 128G
 fi
-cd ${DESTDIR}
+cd ${DESTDIR}/osx-kvm
 ./OpenCore-Boot.sh
