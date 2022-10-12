@@ -1,0 +1,44 @@
+app-id: com.github.kholia.osx-kvm
+runtime: org.freedesktop.Platform
+runtime-version: '22.08'
+sdk: org.freedesktop.Sdk
+command: run
+
+finish-args:
+  - --socket=x11
+  - --share=ipc
+  - --share=network
+  - --socket=pulseaudio
+  - --device=all
+
+modules:
+  - name: qemu
+    config-opts:
+      - "--disable-user"
+      - "--enable-kvm"
+      - "--disable-spice"
+      - "--disable-opengl"
+      - "--disable-virglrenderer"
+      - "--disable-usb-redir"
+      - "--disable-smartcard"
+      - "--python=/bin/python3"
+      - "--target-list=x86_64-softmmu"
+    sources:
+      - type: archive
+        url: https://download.qemu.org/qemu-6.2.0.tar.xz
+        sha256: 68e15d8e45ac56326e0b9a4afa8b49a3dfe8aba3488221d098c84698bca65b45
+  - name: macos
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/kholia/osx-kvm
+        branch: master
+        dest: osx-kvm
+      - type: file
+        path: ./run.sh
+    #  - type: file
+    #    path: ./mac.desktop
+    build-commands:
+      - install -Dm755 run.sh /app/bin/run
+     # - install -Dm755 ./mac.desktop /app/share/applications/com.github.kholia.osx-kvm.desktop
+      - mv osx-kvm /app/osx-kvm
