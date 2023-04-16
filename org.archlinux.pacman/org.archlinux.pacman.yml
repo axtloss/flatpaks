@@ -1,0 +1,64 @@
+app-id: org.archlinux.pacman
+runtime: org.freedesktop.Platform
+runtime-version: '22.08'
+sdk: org.freedesktop.Sdk
+command: run
+finish-args:
+  - --persist=.pacroot
+  - --share=network
+
+modules:
+  - name: fakeroot
+    buildsystem: simple
+    sources:
+      - type: archive
+        url: https://deb.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.31.orig.tar.gz
+        sha256: 63886d41e11c56c7170b9d9331cca086421b350d257338ef14daad98f77e202f
+    build-commands:
+      - ./configure --prefix=/app --disable-static --with-ipc=sysv
+      - make
+      - make install
+
+  - name: fakechroot
+    buildsystem: simple
+    sources:
+      - type: git
+        url: https://github.com/dex4er/fakechroot.git
+        commit: 693a3597ea7fccfb62f357503ff177bd3e3d5a89
+    build-commands:
+      - ./autogen.sh
+      - ./configure --prefix=/app --sbindir=/app/bin --sysconfdir=/app/etc
+      - make
+      - make install
+
+
+  - name: pacman
+    buildsystem: meson
+    sources:
+      - type: archive
+        url: https://sources.archlinux.org/other/pacman/pacman-6.0.2.tar.xz
+        sha256: 7d8e3e8c5121aec0965df71f59bedf46052c6cf14f96365c4411ec3de0a4c1a5
+
+#  - name: pacstrap
+#    buildsystem: simple
+#    sources:
+#      - type: archive
+#        url: https://github.com/archlinux/arch-install-scripts/archive/refs/tags/v28.tar.gz
+#        sha256: 9951748e738417b721bafa70306ac05cbf77a805cf4750ce79133b2b5b9a8b03
+#    build-commands:
+#      - make PREFIX="/app" install
+
+  - name: compat
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/root/var/lib
+      - install -Dm744 run /app/bin/run
+      - install -Dm744 pacman.conf /app/pacman.conf
+      - install -Dm744 mirrorlist /app/mirrorlist
+    sources:
+      - type: file
+        path: ./pacman.conf
+      - type: file
+        path: ./mirrorlist
+      - type: file
+        path: ./run

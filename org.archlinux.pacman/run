@@ -1,0 +1,5 @@
+#!/usr/bin/bash
+mkdir -p ~/.pacroot/root/var/lib
+cp /app/pacman.conf ~/.pacroot/pacman.conf
+cp /app/mirrorlist ~/.pacroot/mirrorlist
+fakechroot fakeroot pacman --root ~/.pacroot/root --dbpath ~/.pacroot/root/var/lib --config ~/.pacroot/pacman.conf "$@"
