@@ -1,6 +1,6 @@
 # [Pacman](https://archlinux.org/)
 
-arch linux's pacman running directly in a flatpak, no chroot or extra container involved.
+Arch Linux's pacman running directly in a flatpak, no chroot or extra container involved.
 
 Runs fine, everything gets stored in `~/.var/app/org.archlinux.pacman/.pacroot/root`.
 
